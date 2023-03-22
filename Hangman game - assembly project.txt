@@ -1,0 +1,881 @@
+COAL project:
+Hangman Game:
+
+------------------------------------------------------------------------------
+
+INCLUDE Irvine32.inc
+
+.data
+hangman1 byte "-----------------------------------------Hangman Game-----------------------------------------",0
+instructions byte "1. You will be shown number of blanks for each word and will be given a finite number of tries at each level", 0AH, 0DH, "2. You will input characters and at each correct input you will be shown at what position the character occurs in the word.",0AH,0DH, "3. Do not enter the same character more than once",0AH,0DH, "4. When you pass one level, only then will you be allowed to enter the next level.",0AH,0DH , "5. Failing a level will quit the game.",0
+
+hangman2 byte "-----------------------------------------LEVEL 1-----------------------------------------",0
+hangman3 byte "You have 10 attempts to complete this level.",0
+guess1 byte " _ _ _ _ _ _",0
+array1 byte "w","y","v","e","r","n"
+s1 byte "Enter a character:",0
+prompt byte "Alphabet at position: ",0
+prompt2 byte "Incorrect alphabet",0
+count byte 0
+win1 byte "CONGRATULATIONS YOU GUESSED THE WORD CORRECTLY",0
+fail1 byte "SORRY YOU WERE UNABLE TO GUESS THE WORD CORRECTLY",0
+used byte 15 dup(?)
+final byte " CONGRATULATIONS! YOU HAVE WON THE GAME! :)",0
+
+hangman4 byte "-----------------------------------------LEVEL 2-----------------------------------------",0
+hangman5 byte "You have 8 attempts to complete this level.",0
+guess2 byte "_ _ _ _ _ _",0
+array2 byte "p","h","l","e","g","m"
+
+hangman6 byte "-----------------------------------------LEVEL 3-----------------------------------------",0
+hangman7 byte "You have 12 attempts to complete this level.",0
+guess3 byte "_ _ _ _ _ _ _ _ _",0
+array3 byte "e","s","p","i","o","n","a","g","e"
+
+hangman8 byte "-----------------------------------------LEVEL 4-----------------------------------------",0
+hangman9 byte "You have 10 attempts to complete this level.",0
+guess4 byte "_ _ _ _ _ _ ",0
+array4 byte "l","a","r","y","n","x"
+
+hangman10 byte "-----------------------------------------LEVEL 5-----------------------------------------",0
+hangman11 byte "You have 9 attempts to complete this level.",0
+guess5 byte "_ _ _ _ _ ",0
+array5 byte "k","l","u","t","z"
+
+hangman12 byte "-----------------------------------------LEVEL 6-----------------------------------------",0
+hangman13 byte "You have 7 attempts to complete this level.",0
+guess6 byte "_ _ _ _ _ _ ",0
+array6 byte "e","u","o","u","a","e"
+
+hangman14 byte "-----------------------------------------LEVEL 7-----------------------------------------",0
+hangman15 byte "You have 12 attempts to complete this level.",0
+guess7 byte "_ _ _ _ _ _ _",0
+array7 byte "s","t","y","m","i","e","d"
+
+hangman16 byte "-----------------------------------------LEVEL 8-----------------------------------------",0
+hangman17 byte "You have 8 attempts to complete this level.",0
+guess8 byte "_ _ _ _ _ _",0
+array8 byte "e","x","o","d","u","s"
+
+hangman18 byte "-----------------------------------------LEVEL 9-----------------------------------------",0
+hangman19 byte "You have 14 attempts to complete this level.",0
+guess9 byte "_ _ _ _ _ _ _ _ _",0
+array9 byte "g","a","l","v","a","n","i","z","e"
+
+hangman20 byte "-----------------------------------------LEVEL 10-----------------------------------------",0
+hangman21 byte "You have 15 attempts to complete this level.",0
+guess10 byte "_ _ _ _ _ _ _ _ _ _",0
+array10 byte "i","a","t","r","o","g","e","n","i","c"
+
+.code
+Main Proc
+mov edx,OFFSET hangman1
+call writestring
+call crlf
+call crlf
+mov edx, offset instructions
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET hangman2
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET hangman3
+call writestring
+call crlf
+call crlf
+call level1
+exit
+Main Endp
+
+level1 proc
+mov edx,OFFSET guess1
+call writestring
+call crlf
+call crlf
+mov ecx,10
+l1:
+	cmp count,6
+	je a3
+	mov esi,0
+	push ecx
+	mov edx,offset s1
+	call writestring
+	call readchar
+	call writechar
+	call crlf
+	mov ecx,6
+l2:
+	mov bl,array1[esi]
+	cmp al,bl
+	je check
+	inc esi
+loop l2
+mov edx, offset prompt2
+call writestring
+call crlf
+call crlf
+jmp a2
+a1:
+	inc count 
+	mov edx,offset prompt
+	call writestring
+	mov eax,esi
+	call writedec
+	call crlf
+	call crlf
+a2:
+	pop ecx
+loop l1
+jmp aftercheck
+check:
+	mov ecx, lengthof used
+	mov edi,0
+	l3:
+	mov dl,used[edi]
+	cmp dl,al
+	je a2
+	inc edi
+	loop l3
+	mov used[esi],al
+	jmp a1
+aftercheck:
+	cmp count,6
+	jl a4
+a3:
+	mov edx,offset win1
+	call writestring
+	call crlf
+	mov count,0
+	mov ecx,15
+	mov esi,0
+	l4:
+	mov used[esi],0
+	inc esi
+	loop l4
+	call level2
+	jmp a5
+a4:
+	mov edx,offset fail1
+	call writestring
+	call crlf
+a5:
+	ret
+level1 Endp
+
+
+level2 proc
+mov edx,OFFSET hangman4
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET hangman5
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET guess2
+call writestring
+call crlf
+call crlf
+mov ecx,8
+l1:
+	cmp count,6
+	je a8
+	mov esi,0
+	push ecx
+	mov edx,offset s1
+	call writestring
+	call readchar
+	call writechar
+	call crlf
+	mov ecx,6
+l2:
+	mov bl,array2[esi]
+	cmp al,bl
+	je check
+	inc esi
+loop l2
+mov edx, offset prompt2
+call writestring
+call crlf
+call crlf
+jmp a7
+a6:
+	inc count
+	mov edx,offset prompt
+	call writestring
+	mov eax,esi
+	call writedec
+	call crlf
+	call crlf
+a7:
+	pop ecx
+loop l1
+jmp aftercheck
+check:
+	mov ecx, lengthof used
+	mov edi,0
+	l3:
+	mov dl,used[edi]
+	cmp dl,al
+	je a7
+	inc edi
+	loop l3
+	mov used[esi],al
+	jmp a6
+aftercheck:
+	cmp count,6
+	jl a9
+a8:
+	mov edx,offset win1
+	call writestring
+	call crlf
+	mov count,0
+	mov ecx,15
+	mov esi,0
+	l4:
+	mov used[esi],0
+	inc esi
+	loop l4
+	call level3
+	jmp a10
+a9:
+	mov edx,offset fail1
+	call writestring
+	call crlf
+a10:
+	ret
+level2 Endp
+
+
+level3 proc
+mov edx,OFFSET hangman6
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET hangman7
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET guess3
+call writestring
+call crlf
+call crlf
+mov ecx,12
+l1:
+	cmp count,9
+	je a3
+	mov esi,0
+	push ecx
+	mov edx,offset s1
+	call writestring
+	call readchar
+	call writechar
+	call crlf
+	mov edi,0 ; to check the Invalid condition
+	mov ecx,9
+l2:
+	mov bl,array3[esi]
+	cmp al,bl
+	je a1
+	inc esi
+	
+loop l2
+cmp edi,0
+JNE next
+mov edx, OFFSET prompt2
+call writestring 
+call crlf
+next: jmp a2
+a1: 
+    inc edi ; to see whether it found any equivalent char to the input character 
+	push eax
+	inc count
+	mov edx,offset prompt
+	call writestring
+	mov eax,esi
+	call writedec
+	call crlf
+	call crlf
+	pop eax
+	inc esi
+	jmp l2
+a2:
+	pop ecx
+loop l1
+jmp a4
+a3:
+	mov edx,offset win1
+	call writestring
+	call crlf
+	mov count,0
+	call level4
+	jmp a5
+a4:
+	mov edx,offset fail1
+	call writestring
+	call crlf
+a5:
+	ret
+level3 endp
+
+
+level4 proc
+mov edx,OFFSET hangman8
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET hangman9
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET guess4
+call writestring
+call crlf
+call crlf
+mov ecx,10
+l1:
+	cmp count,6
+	je a8
+	mov esi,0
+	push ecx
+	mov edx,offset s1
+	call writestring
+	call readchar
+	call writechar
+	call crlf
+	mov ecx,6
+l2:
+	mov bl,array4[esi]
+	cmp al,bl
+	je check
+	inc esi
+loop l2
+mov edx, offset prompt2
+call writestring
+call crlf
+call crlf
+jmp a7
+a6:
+	inc count
+	mov edx,offset prompt
+	call writestring
+	mov eax,esi
+	call writedec
+	call crlf
+	call crlf
+a7:
+	pop ecx
+loop l1
+jmp aftercheck
+check:
+	mov ecx, lengthof used
+	mov edi,0
+	l3:
+	mov dl,used[edi]
+	cmp dl,al
+	je a7
+	inc edi
+	loop l3
+	mov used[esi],al
+	jmp a6
+aftercheck:
+	cmp count,6
+	jl a9
+a8:
+	mov edx,offset win1
+	call writestring
+	call crlf
+	mov count,0
+	mov ecx,15
+	mov esi,0
+	l4:
+	mov used[esi],0
+	inc esi
+	loop l4
+	call level5
+	jmp a10
+a9:
+	mov edx,offset fail1
+	call writestring
+	call crlf
+a10:
+	ret
+level4 Endp
+
+
+
+level5 proc
+mov edx,OFFSET hangman10
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET hangman11
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET guess5
+call writestring
+call crlf
+call crlf
+mov ecx,9
+l1:
+	cmp count,5
+	je a8
+	mov esi,0
+	push ecx
+	mov edx,offset s1
+	call writestring
+	call readchar
+	call writechar
+	call crlf
+	mov ecx,5
+l2:
+	mov bl,array5[esi]
+	cmp al,bl
+	je check
+	inc esi
+loop l2
+mov edx, offset prompt2
+call writestring
+call crlf
+call crlf
+jmp a7
+a6:
+	inc count
+	mov edx,offset prompt
+	call writestring
+	mov eax,esi
+	call writedec
+	call crlf
+	call crlf
+a7:
+	pop ecx
+loop l1
+jmp aftercheck
+check:
+	mov ecx, lengthof used
+	mov edi,0
+	l3:
+	mov dl,used[edi]
+	cmp dl,al
+	je a7
+	inc edi
+	loop l3
+	mov used[esi],al
+	jmp a6
+aftercheck:
+	cmp count,5
+	jl a9
+a8:
+	mov edx,offset win1
+	call writestring
+	call crlf
+	mov ecx,15
+	mov esi,0
+	l4:
+	mov used[esi],0
+	inc esi
+	loop l4
+	mov count,0
+	call level6
+	jmp a10
+a9:
+	mov edx,offset fail1
+	call writestring
+	call crlf
+a10:
+	ret
+level5 Endp
+
+
+level6 proc
+mov edx,OFFSET hangman12
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET hangman13
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET guess6
+call writestring
+call crlf
+call crlf
+mov ecx,7
+l3:
+	cmp count,6
+	je a8
+	mov esi,0
+	push ecx
+	mov edx,offset s1
+	call writestring
+	call readchar
+	call writechar
+	call crlf
+	mov edi,0
+	mov ecx,6
+l4:
+	mov bl,array6[esi]
+	cmp al,bl
+	je a6
+	inc esi
+loop l4
+cmp edi,0
+JNE next
+mov edx, OFFSET prompt2
+call writestring 
+call crlf
+next: jmp a7
+a6:
+	inc edi
+	push eax
+	inc count
+	mov edx,offset prompt
+	call writestring
+	mov eax,esi
+	call writedec
+	call crlf
+	call crlf
+	pop eax
+	inc esi
+	jmp l4
+a7:
+	pop ecx
+loop l3
+	cmp count,6
+	jl a9
+a8:
+	mov edx,offset win1
+	call writestring
+	call crlf
+	mov count,0
+	call level7
+	jmp a10
+a9:
+	mov edx,offset fail1
+	call writestring
+	call crlf
+a10:
+	ret
+level6 Endp
+
+
+level7 proc
+mov edx,OFFSET hangman14
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET hangman15
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET guess7
+call writestring
+call crlf
+call crlf
+mov ecx,12
+l3:
+	cmp count,7
+	je a8
+	mov esi,0
+	push ecx
+	mov edx,offset s1
+	call writestring
+	call readchar
+	call writechar
+	call crlf
+	mov ecx,7
+l4:
+	mov bl,array7[esi]
+	cmp al,bl
+	je check
+	inc esi
+loop l4
+mov edx, offset prompt2
+call writestring
+call crlf
+call crlf
+jmp a7
+a6:
+	inc count
+	mov edx,offset prompt
+	call writestring
+	mov eax,esi
+	call writedec
+	call crlf
+	call crlf
+a7:
+	pop ecx
+loop l3
+jmp aftercheck
+check:
+	mov ecx, lengthof used
+	mov edi,0
+	l5:
+	mov dl,used[edi]
+	cmp dl,al
+	je a7
+	inc edi
+	loop l5
+	mov used[esi],al
+	jmp a6
+aftercheck:
+	cmp count,7
+	jl a9
+a8:
+	mov edx,offset win1
+	call writestring
+	call crlf
+	mov ecx,15
+	mov esi,0
+	l6:
+	mov used[esi],0
+	inc esi
+	loop l6
+	mov count,0
+	call level8
+	jmp a10
+a9:
+	mov edx,offset fail1
+	call writestring
+	call crlf
+a10:
+	ret
+level7 Endp
+
+
+
+level8 proc
+mov edx,OFFSET hangman16
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET hangman17
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET guess8
+call writestring
+call crlf
+call crlf
+mov ecx,8
+l3:
+	cmp count,6
+	je a8
+	mov esi,0
+	push ecx
+	mov edx,offset s1
+	call writestring
+	call readchar
+	call writechar
+	call crlf
+	mov ecx,6
+l4:
+	mov bl,array8[esi]
+	cmp al,bl
+	je check
+	inc esi
+loop l4
+mov edx, offset prompt2
+call writestring
+call crlf
+call crlf
+jmp a7
+a6:
+	inc count
+	mov edx,offset prompt
+	call writestring
+	mov eax,esi
+	call writedec
+	call crlf
+	call crlf
+a7:
+	pop ecx
+loop l3
+jmp aftercheck
+check:
+	mov ecx, lengthof used
+	mov edi,0
+	l5:
+	mov dl,used[edi]
+	cmp dl,al
+	je a7
+	inc edi
+	loop l5
+	mov used[esi],al
+	jmp a6
+aftercheck:
+	cmp count,6
+	jl a9
+a8:
+	mov edx,offset win1
+	call writestring
+	call crlf
+	mov ecx,15
+	mov esi,0
+	l6:
+	mov used[esi],0
+	inc esi
+	loop l6
+	mov count,0
+	call level9
+	jmp a10
+a9:
+	mov edx,offset fail1
+	call writestring
+	call crlf
+a10:
+	ret
+level8 Endp
+
+
+
+level9 proc
+mov edx,OFFSET hangman18
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET hangman19
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET guess9
+call writestring
+call crlf
+call crlf
+mov ecx,14
+l1:
+	cmp count,9
+	je a3
+	mov esi,0
+	push ecx
+	mov edx,offset s1
+	call writestring
+	call readchar
+	call writechar
+	call crlf
+	mov edi,0
+	mov ecx,9
+l2:
+	mov bl,array9[esi]
+	cmp al,bl
+	je a1
+	inc esi
+loop l2
+cmp edi,0
+JNE next
+mov edx, OFFSET prompt2
+call writestring 
+call crlf
+next: jmp a2
+a1:
+	inc edi
+	push eax
+	inc count
+	mov edx,offset prompt
+	call writestring
+	mov eax,esi
+	call writedec
+	call crlf
+	call crlf
+	pop eax
+	inc esi
+	jmp l2
+a2:
+	pop ecx
+loop l1
+	cmp count,9
+	jl a4
+a3:
+	mov edx,offset win1
+	call writestring
+	call crlf
+	mov count,0
+	call level10
+	jmp a5
+a4:
+	mov edx,offset fail1
+	call writestring
+	call crlf
+a5:
+	ret
+level9 endp
+
+
+level10 proc
+mov edx,OFFSET hangman20
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET hangman21
+call writestring
+call crlf
+call crlf
+mov edx,OFFSET guess10
+call writestring
+call crlf
+call crlf
+mov ecx,15
+l1:
+	cmp count,10
+	je a3
+	mov esi,0
+	push ecx
+	mov edx,offset s1
+	call writestring
+	call readchar
+	call writechar
+	call crlf
+	mov edi,0
+	mov ecx,10
+l2:
+	mov bl,array10[esi]
+	cmp al,bl
+	je a1
+	inc esi
+loop l2
+cmp edi,0
+JNE next
+mov edx, OFFSET prompt2
+call writestring 
+call crlf
+next: jmp a2
+a1:
+	inc edi
+	push eax
+	inc count
+	mov edx,offset prompt
+	call writestring
+	mov eax,esi
+	call writedec
+	call crlf
+	call crlf
+	pop eax
+	inc esi
+	jmp l2
+a2:
+	pop ecx
+loop l1
+	cmp count,10
+	jl a4
+a3:
+	mov edx,offset win1
+	call writestring
+	call crlf
+	call crlf
+	mov edx,offset final
+	call writestring
+	call crlf
+	jmp a5
+a4:
+	mov edx,offset fail1
+	call writestring
+	call crlf
+a5:
+	ret
+level10 endp
+
+
+End Main
